@@ -44,9 +44,81 @@ person_id                   	                                  transcript
 16371	       I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th.
 
 
+## With the help of witness Transcript finding the murderer
+
+select person_id,name,membership_id,membership_status
+from  get_fit_now_member gf join
+get_fit_now_check_in gfc
+on gf.id = gfc.membership_id
+where gf.membership_status = 'gold' and
+membership_id like '%48Z%' and
+gfc.check_in_date = 20180109
+
+person_id       	  name	           membership_id	            membership_status
+28819	            Joe Germuska	          48Z7A                   	gold
+67318	            Jeremy Bowers	           48Z55	                  gold
+
+##narrowing down with the car licence palte detials to find the murderer
+
+select p.id,p.name,d.plate_number,gf.membership_status
+from person p join drivers_license d
+on p.license_id = d.id join 
+get_fit_now_member  gf
+on gf.name = p.name
+where d.plate_number like '%H42W%'
+
+id	       name	                plate_number	membership_status
+67318	   Jeremy Bowers	           0H42W2       	gold
+
+Check your solution
+Did you find the killer?
+INSERT INTO solution VALUES (1, 'Jeremy Bowers');
+        SELECT value FROM solution;
+        
+  Value
+Congrats, you found the murderer! But wait, there's more... 
+If you think you're up for a challenge, try querying the interview transcript of the murderer to find the real villain behind this crime. 
+If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries.
+Use this same INSERT statement with your new suspect to check your answer.
+
+
+## Findig the master brain behind the murder
+
+
+select transcript
+from interview
+where person_id = 67318
+
+transcript
+I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). 
+She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017.
 
 
 
+
+select p.name,d.car_model,fb.event_name,fb.date
+from person p 
+join facebook_event_checkin fb
+on p.id = fb.person_id
+join drivers_license d
+on p.license_id = d.id
+where 
+d.car_make = 'Tesla' and
+d.hair_color ='red' and 
+fb.event_name = 'SQL Symphony Concert'
+
+  name	         car_model	   event_name	         date
+Miranda Priestly	Model S 	SQL Symphony Concert	20171206
+Miranda Priestly	Model S 	SQL Symphony Concert	20171212
+Miranda Priestly	Model S 	SQL Symphony Concert	20171229
+
+Check your solution
+
+NSERT INTO solution VALUES (1, 'Miranda Priestly');
+        
+        SELECT value FROM solution;
+ 
+Congrats, you found the brains behind the murder! Everyone in SQL City hails you as the greatest SQL detective of all time. Time to break out the champagne!
 
 
 
